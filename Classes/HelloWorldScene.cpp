@@ -45,6 +45,13 @@ void HelloWorld::menuChangeSceneCallback(cocos2d::Ref* pSender)
 //    Director::getInstance()->replaceScene(pScene);
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    //     JniMethodInfo methodInfo;
+    //     bool isHave = JniHelper::getStaticMethodInfo(methodInfo,"com/eju/jz/AppActivity","getInstance","()Ljava/lang/Object;");
+    //     jobject jobj;
+    //     if (isHave) jobj=methodInfo.env->CallStaticObjectMethod(methodInfo.classID,methodInfo.methodID);
+    //     bool ret = JniHelper::getMethodInfo(methodInfo,"com/eju/jz/AppActivity","showAccountView","(I)V");
+    //     if(ret) methodInfo.env->CallVoidMethod(jobj,methodInfo.methodID,(int)this);
+    
     JniMethodInfo minfo;
     bool isHave = JniHelper::getStaticMethodInfo(minfo,"com/eju/jz/AppActivity","CPPSayHello", "(Ljava/lang/String;I)V");
     if (isHave)
