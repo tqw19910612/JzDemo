@@ -5,3 +5,5 @@ proj.win10/
 proj.win32/
 bin/
 
+*.iml
+cocos2d/cocos/platform/android/libcocos2dx/build
