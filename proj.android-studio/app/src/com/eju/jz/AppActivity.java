@@ -21,10 +21,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-package org.cocos2dx.cpp;
+package com.eju.jz;
+
+import android.util.Log;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
 public class AppActivity extends Cocos2dxActivity {
-    
+    public native static void androidSayHello(String b,int a);
+
+    public static void CPPSayHello(String b,int a)
+    {
+        Log.i("","android收到C++来的数据：b="+b+",a="+a);
+        androidSayHello(b,a); //调用native方法
+    }
+
+
 }

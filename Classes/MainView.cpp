@@ -36,6 +36,23 @@ bool MainView::init()
     EventDispatcher* eventDispatcher = Director::getInstance()->getEventDispatcher();
     eventDispatcher->addEventListenerWithSceneGraphPriority(listener,this);
     
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//     JniMethodInfo methodInfo;
+//     bool isHave = JniHelper::getStaticMethodInfo(methodInfo,"org/cocos2dx/cpp/AppActivity","getInstance","()Ljava/lang/Object;");
+//     jobject jobj;
+//     if (isHave) jobj=methodInfo.env->CallStaticObjectMethod(methodInfo.classID,methodInfo.methodID);
+//     bool ret = JniHelper::getMethodInfo(methodInfo,"com/taomee/xiaoHuaXian/XiaoHuaXian","showAccountView","(I)V");
+//     if(ret) methodInfo.env->CallVoidMethod(jobj,methodInfo.methodID,(int)this);
+    
+    JniMethodInfo minfo;
+    bool isHave = JniHelper::getStaticMethodInfo(minfo,"org/cocos2dx/cpp/AppActivity","CPPSayHello", "(I;Ljava/lang/String;)V");
+    if (isHave)
+    {
+        minfo.env->CallStaticVoidMethod(minfo.classID, minfo.methodID,123,minfo.env->NewStringUTF("abcdef"));
+//        minfo.env->DeleteLocalRef(minfo.classID);
+    }
+#endif
+    
     return true;
 }
 
@@ -53,3 +70,4 @@ void MainView::touchEnded(Touch *touch, Event *event)
 {
     
 }
+

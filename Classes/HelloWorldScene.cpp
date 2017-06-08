@@ -41,8 +41,19 @@ bool HelloWorld::init()
 
 void HelloWorld::menuChangeSceneCallback(cocos2d::Ref* pSender)
 {
-    Scene* pScene = MainView::scene();
-    Director::getInstance()->replaceScene(pScene);
+//    Scene* pScene = MainView::scene();
+//    Director::getInstance()->replaceScene(pScene);
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    JniMethodInfo minfo;
+    bool isHave = JniHelper::getStaticMethodInfo(minfo,"com/eju/jz/AppActivity","CPPSayHello", "(Ljava/lang/String;I)V");
+    if (isHave)
+    {
+        log("c++发数据给android");
+        minfo.env->CallStaticVoidMethod(minfo.classID, minfo.methodID,minfo.env->NewStringUTF("abcdef"),123);
+        //        minfo.env->DeleteLocalRef(minfo.classID);
+    }
+#endif
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
@@ -56,3 +67,4 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 }
+
