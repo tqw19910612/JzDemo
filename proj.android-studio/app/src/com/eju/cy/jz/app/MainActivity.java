@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.eju.cy.jz.data.CocosData;
-import com.eju.jz.AppActivity;
 
 import java.util.ArrayList;
 import java.util.List;
