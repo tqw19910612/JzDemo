@@ -13,6 +13,7 @@
 #include "CanvasUI.hpp"
 
 USING_NS_CC;
+using namespace std;
 
 Scene* CanvasScene::scene()
 {
@@ -60,10 +61,10 @@ bool CanvasScene::init()
     
     GameEvent::getInstance()->addEventListener(this, "ControllModelChange", [&](EventCustom*evt){
         const char* name = (const char*)evt->getUserData();
-        if (std::strcmp(name, "drawWallModel")==0) {
+        if (strcmp(name, "drawWallModel")==0) {
             log("切换操作类型为画墙");
             m_nowControllModel = controllMode::drawWallMode;
-        } else if (std::strcmp(name, "viewModel")==0) {
+        } else if (strcmp(name, "viewModel")==0) {
             log("切换操作类型为观察");
             m_nowControllModel = controllMode::viewMode;
         }

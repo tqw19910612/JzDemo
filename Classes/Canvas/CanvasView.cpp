@@ -13,6 +13,7 @@
 #include "Wall.hpp"
 
 USING_NS_CC;
+using namespace std;
 
 CanvasView::~CanvasView()
 {
@@ -47,9 +48,9 @@ bool CanvasView::init()
     
     GameEvent::getInstance()->addEventListener(this, "ControllModelChange", [&](EventCustom*evt){
         const char* name = (const char*)evt->getUserData();
-        if (std::strcmp(name, "drawWallModel")==0) {
+        if (strcmp(name, "drawWallModel")==0) {
             m_nowControllModel = controllMode::drawWallMode;
-        } else if (std::strcmp(name, "viewModel")==0) {
+        } else if (strcmp(name, "viewModel")==0) {
             m_nowControllModel = controllMode::viewMode;
         }
     });

@@ -54,7 +54,7 @@ void HelloWorld::menuChangeSceneCallback(cocos2d::Ref* pSender)
     //     if(ret) methodInfo.env->CallVoidMethod(jobj,methodInfo.methodID,(int)this);
     
     JniMethodInfo minfo;
-    bool isHave = JniHelper::getStaticMethodInfo(minfo,"com/eju/jz/AppActivity","CPPSayHello", "(Ljava/lang/String;I)V");
+    bool isHave = JniHelper::getStaticMethodInfo(minfo,"com/eju/cy/jz/AppActivity","CPPSayHello", "(Ljava/lang/String;I)V");
     if (isHave)
     {
         log("c++发数据给android");
