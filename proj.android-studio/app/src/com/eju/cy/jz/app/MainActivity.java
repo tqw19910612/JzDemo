@@ -81,6 +81,13 @@ public class MainActivity extends Activity implements CocosData {
         setContentView(recyclerView, lp);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // access data
+    }
+
     private static class InterceptorClickListener implements View.OnClickListener {
 
         private List<ClickInterceptor> interceptors = new ArrayList<>();

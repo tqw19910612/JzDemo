@@ -23,17 +23,34 @@ THE SOFTWARE.
 ****************************************************************************/
 package com.eju.cy.jz.app;
 
+import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
 public class AppActivity extends Cocos2dxActivity {
-    public native static void androidSayHello(String b,int a);
 
-    public static void CPPSayHello(String b,int a)
+    private static AppActivity _instance = null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        _instance = this;
+    }
+
+    public static AppActivity getInstance() {
+        return  _instance;
+    }
+
+    public native void androidSayHello(String b, int a);
+
+    public void CPPSayHello(String b,int a)
     {
         Log.i("","android收到C++来的数据：b="+b+",a="+a);
-        androidSayHello(b,a); //调用native方法
+//        androidSayHello(b,a); //调用native方法
     }
 
 
