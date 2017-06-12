@@ -3,17 +3,14 @@ package com.eju.cy.jz.app;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.eju.cy.jz.adapter.CustomAdapter;
+import com.eju.cy.jz.adapter.CustomAdapter.CustomDataAdapter;
 import com.eju.cy.jz.data.CocosData;
 
 import java.util.ArrayList;
@@ -26,7 +23,25 @@ import java.util.List;
  * @author tangqianwei.
  * @date 2017/06/08
  */
-public class MainActivity extends Activity implements CocosData {
+public class MainActivity extends Activity implements CocosData, CustomDataAdapter {
+
+    private final String[] LABELS = {
+            "goto cocos2dx without data",
+            "goto cocos2dx with bundle data",
+            "goto cocos2dx with native data"
+    };
+    private final ClickInterceptor[] INTERCEPTORS = {
+            null,
+            chain -> {
+                Intent intent = chain.getIntent();
+                intent.putExtra(LINE_WIDTH, 12);
+                return chain.proceed(intent);
+            },
+            null
+    };
+    private final InterceptorClickListener listener =
+            new InterceptorClickListener(MainActivity.this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,46 +50,7 @@ public class MainActivity extends Activity implements CocosData {
         RecyclerView recyclerView = new RecyclerView(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new CustomAdapter(new CustomDataAdapter() {
-
-            private final String[] LABELS = {
-                    "goto cocos2dx without data",
-                    "goto cocos2dx with bundle data",
-                    "goto cocos2dx with native data"
-            };
-            private final ClickInterceptor[] INTERCEPTORS = {
-                    null,
-                    new ClickInterceptor() {
-                        @Override
-                        public Intent intercept(Chain chain) throws Exception {
-                            Intent intent = chain.getIntent();
-                            intent.putExtra(LINE_WIDTH, 12);
-                            return chain.proceed(intent);
-                        }
-                    },
-                    null
-            };
-            private final InterceptorClickListener listener =
-                    new InterceptorClickListener(MainActivity.this);
-
-            @Override
-            public int size() {
-                return LABELS.length;
-            }
-
-            @Override
-            public String getLabel(int position) {
-                return LABELS[position % LABELS.length];
-            }
-
-            @Override
-            public View.OnClickListener getClickEvent(int position) {
-                listener.clearClickInterceptors();
-                listener.addClickInterceptor(INTERCEPTORS[position]);
-                return listener;
-            }
-
-        }));
+        recyclerView.setAdapter(new CustomAdapter(this));
 
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -86,6 +62,23 @@ public class MainActivity extends Activity implements CocosData {
         super.onActivityResult(requestCode, resultCode, data);
 
         // access data
+    }
+
+    @Override
+    public int size() {
+        return LABELS.length;
+    }
+
+    @Override
+    public String getLabel(int position) {
+        return LABELS[position % LABELS.length];
+    }
+
+    @Override
+    public View.OnClickListener getClickEvent(int position) {
+        listener.clearClickInterceptors();
+        listener.addClickInterceptor(INTERCEPTORS[position]);
+        return listener;
     }
 
     private static class InterceptorClickListener implements View.OnClickListener {
@@ -155,65 +148,5 @@ public class MainActivity extends Activity implements CocosData {
                 return interceptor.intercept(next);
             }
         }
-    }
-
-    private static class CustomViewHolder extends RecyclerView.ViewHolder {
-
-        private CustomViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    private static class CustomAdapter extends RecyclerView.Adapter<CustomViewHolder> {
-
-        private CustomDataAdapter mDataAdapter;
-
-        private CustomAdapter(CustomDataAdapter dataAdapter) {
-            mDataAdapter = dataAdapter;
-        }
-
-        @Override
-        public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
-            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-            TextView view = new TextView(parent.getContext());
-            view.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    metrics.heightPixels / 5));
-            view.setBackgroundColor(Color.WHITE);
-            view.setGravity(Gravity.CENTER_VERTICAL);
-            view.setPadding(getDipHeight(metrics, 6), 0, 0, 0);
-            view.setTextColor(Color.BLACK);
-            view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-            return new CustomViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(CustomViewHolder holder, int position) {
-            TextView view = (TextView)holder.itemView;
-            view.setText(mDataAdapter.getLabel(position));
-            view.setOnClickListener(mDataAdapter.getClickEvent(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mDataAdapter.size();
-        }
-
-        private int getDipHeight(DisplayMetrics metrics, int value) {
-            return (int)TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    value,
-                    metrics);
-        }
-    }
-
-    private interface CustomDataAdapter {
-
-        int size();
-
-        String getLabel(int position);
-
-        View.OnClickListener getClickEvent(int position);
     }
 }

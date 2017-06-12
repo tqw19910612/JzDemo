@@ -1,7 +1,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
-#include "MainView.hpp"
+#include "CanvasScene.hpp"
 
 USING_NS_CC;
 
@@ -41,8 +41,9 @@ bool HelloWorld::init()
 
 void HelloWorld::menuChangeSceneCallback(cocos2d::Ref* pSender)
 {
-//    Scene* pScene = MainView::scene();
-//    Director::getInstance()->replaceScene(pScene);
+    Scene* pScene = CanvasScene::scene();
+    Director::getInstance()->replaceScene(pScene);
+    return;
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     JniMethodInfo methodInfo;

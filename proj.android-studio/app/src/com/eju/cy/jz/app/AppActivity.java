@@ -26,20 +26,69 @@ package com.eju.cy.jz.app;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import com.eju.cy.jz.tools.SizeHelper;
+import com.eju.jz.R;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
-public class AppActivity extends Cocos2dxActivity {
+public class AppActivity extends Cocos2dxActivity implements Handler.Callback {
 
-    private static AppActivity _instance = null;
+    private Handler mHandler;
+
+    private TextView mDataView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         _instance = this;
+
+        mHandler = new Handler(this);
+
+        TextView data = new TextView(this);
+        data.setGravity(Gravity.CENTER_VERTICAL);
+        data.setPadding(SizeHelper.getSizeByDip(this, 8), 0, 0, 0);
+        data.setBackgroundColor(Color.argb(0x80, 0xFF, 0xFF, 0xFF));
+        data.setTextColor(Color.BLACK);
+        data.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        mDataView = data;
+
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.gravity = Gravity.TOP | Gravity.START;
+
+        mFrameLayout.addView(data, lp);
     }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        switch (msg.what) {
+            case R.id.COCOS_ACTIVITY_UPDATE_DATA: {
+                if(null != mDataView) {
+
+                    mDataView.setText("");
+                }
+                return true;
+            }
+            default: {
+                return false;
+            }
+        }
+    }
+
+    private static AppActivity _instance = null;
 
     public static AppActivity getInstance() {
         return  _instance;
@@ -52,6 +101,4 @@ public class AppActivity extends Cocos2dxActivity {
         Log.i("","android收到C++来的数据：b="+b+",a="+a);
 //        androidSayHello(b,a); //调用native方法
     }
-
-
 }
