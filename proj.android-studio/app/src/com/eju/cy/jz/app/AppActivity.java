@@ -23,9 +23,6 @@ THE SOFTWARE.
 ****************************************************************************/
 package com.eju.cy.jz.app;
 
-import android.animation.ObjectAnimator;
-import android.content.Intent;
-import android.os.Bundle;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +39,7 @@ import com.eju.jz.R;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
+
 public class AppActivity extends Cocos2dxActivity implements Handler.Callback {
 
     private Handler mHandler;
@@ -52,8 +50,6 @@ public class AppActivity extends Cocos2dxActivity implements Handler.Callback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        _instance = this;
 
         mHandler = new Handler(this);
 
@@ -88,17 +84,16 @@ public class AppActivity extends Cocos2dxActivity implements Handler.Callback {
         }
     }
 
-    private static AppActivity _instance = null;
-
-    public static AppActivity getInstance() {
-        return  _instance;
-    }
-
     public native void androidSayHello(String b, int a);
 
-    public void CPPSayHello(String b,int a)
+    @SuppressWarnings("unused")
+    public void CPPSayHello(String b, int a)
     {
-        Log.i("","android收到C++来的数据：b="+b+",a="+a);
-//        androidSayHello(b,a); //调用native方法
+//        Log.i("","android收到C++来的数据：b="+b+",a="+a);
+
+        b = b.concat("-android_handled");
+
+        //调用native方法
+        androidSayHello(b,a);
     }
 }

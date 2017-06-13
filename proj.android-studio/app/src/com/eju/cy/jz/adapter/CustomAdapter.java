@@ -1,15 +1,21 @@
 package com.eju.cy.jz.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.eju.cy.jz.app.AppActivity;
 import com.eju.cy.jz.tools.SizeHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -26,7 +32,40 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
         String getLabel(int position);
 
-        View.OnClickListener getClickEvent(int position);
+        List<ClickInterceptor> getClickEvent(int position);
+    }
+
+    public interface ClickInterceptor {
+        Intent intercept(Chain chain) throws Exception;
+
+        class Chain {
+
+            private ClickInterceptor[] interceptors;
+            private int index;
+            private Intent intent;
+
+            private Chain(int index, ClickInterceptor[] interceptors, Intent intent) {
+                this.index = index;
+                this.interceptors = interceptors;
+                this.intent = intent;
+            }
+
+            private Intent getIntent() {
+                return this.intent;
+            }
+
+            private Intent proceed(Intent intent) throws Exception {
+                if(null == this.interceptors
+                        || 0 == this.interceptors.length
+                        || this.interceptors.length <= index) {
+                    return intent;
+                }
+
+                ClickInterceptor interceptor = this.interceptors[index];
+                Chain next = new Chain(index + 1, interceptors, intent);
+                return interceptor.intercept(next);
+            }
+        }
     }
 
     private CustomDataAdapter mDataAdapter;
@@ -68,6 +107,43 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
         private CustomViewHolder(View itemView) {
             super(itemView);
+        }
+    }
+
+    public static class InterceptorClickListener implements View.OnClickListener {
+
+        private SparseArray<ClickInterceptor[]> interceptors = new SparseArray<>();
+        private Context mContext;
+
+        public InterceptorClickListener(Context context) {
+            this.mContext = context;
+        }
+
+        private void addClickInterceptor(int position, List<ClickInterceptor> interceptor) {
+            if(null == interceptor) {
+                interceptor = new ArrayList<>();
+            }
+
+            this.interceptors.put(position,
+                    interceptor.toArray(new ClickInterceptor[interceptor.size()]));
+        }
+
+        private void clearClickInterceptors() {
+            this.interceptors.clear();
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            Intent origin = new Intent(mContext, AppActivity.class);
+            ClickInterceptor.Chain chain = new ClickInterceptor.Chain(
+                    0, interceptors.toArray(new ClickInterceptor[interceptors.size()]), origin);
+            try {
+                Intent intent = chain.proceed(origin);
+                mContext.startActivity(null == intent ? origin : intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
