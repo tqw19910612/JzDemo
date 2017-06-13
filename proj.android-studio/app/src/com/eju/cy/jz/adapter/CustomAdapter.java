@@ -31,8 +31,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         int size();
 
         String getLabel(int position);
-
-        List<ClickInterceptor> getClickEvent(int position);
     }
 
     public interface ClickInterceptor {
@@ -95,7 +93,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         TextView view = (TextView)holder.itemView;
         view.setText(mDataAdapter.getLabel(position));
-        view.setOnClickListener(mDataAdapter.getClickEvent(position));
     }
 
     @Override
@@ -135,15 +132,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
         @Override
         public void onClick(View v) {
-            Intent origin = new Intent(mContext, AppActivity.class);
-            ClickInterceptor.Chain chain = new ClickInterceptor.Chain(
-                    0, interceptors.toArray(new ClickInterceptor[interceptors.size()]), origin);
-            try {
-                Intent intent = chain.proceed(origin);
-                mContext.startActivity(null == intent ? origin : intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            Intent origin = new Intent(mContext, AppActivity.class);
+//            ClickInterceptor.Chain chain = new ClickInterceptor.Chain(
+//                    0, interceptors.toArray(new ClickInterceptor[interceptors.size()]), origin);
+//            try {
+//                Intent intent = chain.proceed(origin);
+//                mContext.startActivity(null == intent ? origin : intent);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 
 import com.eju.cy.jz.adapter.CustomAdapter;
@@ -21,7 +22,8 @@ import java.util.List;
  * @author tangqianwei.
  * @date 2017/06/08
  */
-public class MainActivity extends Activity implements CocosData, CustomDataAdapter {
+public class MainActivity extends Activity implements
+        CocosData, CustomDataAdapter, RecyclerView.OnItemTouchListener {
 
     private final String[] LABELS = {
             "goto cocos2dx without data",
@@ -38,6 +40,7 @@ public class MainActivity extends Activity implements CocosData, CustomDataAdapt
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new CustomAdapter(this));
+        recyclerView.addOnItemTouchListener(this);
 
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -62,10 +65,17 @@ public class MainActivity extends Activity implements CocosData, CustomDataAdapt
     }
 
     @Override
-    public List<CustomAdapter.ClickInterceptor> getClickEvent(int position) {
-        switch (position) {
-            case 0:
-                return ArrayList<String>::new;
-        }
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
     }
 }
