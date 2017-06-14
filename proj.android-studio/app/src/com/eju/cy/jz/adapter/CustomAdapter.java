@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.eju.cy.jz.app.AppActivity;
 import com.eju.cy.jz.tools.SizeHelper;
 
 import java.util.ArrayList;
@@ -31,6 +30,72 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         int size();
 
         String getLabel(int position);
+    }
+
+    public interface OnItemClickListener {
+
+        void onClick(View v, int position);
+    }
+
+
+    private CustomDataAdapter mDataAdapter;
+    private OnItemClickListener mItemClickListener;
+
+    public CustomAdapter(CustomDataAdapter dataAdapter, OnItemClickListener itemClickListener) {
+        mDataAdapter = dataAdapter;
+        mItemClickListener = itemClickListener;
+    }
+
+    @Override
+    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+
+        TextView view = new TextView(context);
+        view.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                SizeHelper.getScreenHeight(context) / 8));
+        view.setBackgroundColor(Color.WHITE);
+        view.setGravity(Gravity.CENTER_VERTICAL);
+        view.setPadding(SizeHelper.getSizeByDip(context, 6), 0, 0, 0);
+        view.setTextColor(Color.BLACK);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
+        return new CustomViewHolder(view, mItemClickListener);
+    }
+
+    @Override
+    public void onBindViewHolder(CustomViewHolder holder, int position) {
+        TextView view = (TextView)holder.itemView;
+        view.setText(mDataAdapter.getLabel(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return mDataAdapter.size();
+    }
+
+    static class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private OnItemClickListener mItemClickListener;
+
+        private CustomViewHolder(View itemView, OnItemClickListener itemClickListener) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+
+            mItemClickListener = itemClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+//            int adapterPosition = this.getAdapterPosition();
+//            int layoutPosition = this.getLayoutPosition();
+//
+//            Log.d("item", String.format("[%d, %d]", adapterPosition, layoutPosition));
+
+            if (null != mItemClickListener) {
+                mItemClickListener.onClick(v, this.getAdapterPosition());
+            }
+        }
     }
 
     public interface ClickInterceptor {
@@ -63,47 +128,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
                 Chain next = new Chain(index + 1, interceptors, intent);
                 return interceptor.intercept(next);
             }
-        }
-    }
-
-    private CustomDataAdapter mDataAdapter;
-
-    public CustomAdapter(CustomDataAdapter dataAdapter) {
-        mDataAdapter = dataAdapter;
-    }
-
-    @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-
-        TextView view = new TextView(context);
-        view.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                SizeHelper.getScreenHeight(context) / 8));
-        view.setBackgroundColor(Color.WHITE);
-        view.setGravity(Gravity.CENTER_VERTICAL);
-        view.setPadding(SizeHelper.getSizeByDip(context, 6), 0, 0, 0);
-        view.setTextColor(Color.BLACK);
-        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-
-        return new CustomViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        TextView view = (TextView)holder.itemView;
-        view.setText(mDataAdapter.getLabel(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mDataAdapter.size();
-    }
-
-    static class CustomViewHolder extends RecyclerView.ViewHolder {
-
-        private CustomViewHolder(View itemView) {
-            super(itemView);
         }
     }
 

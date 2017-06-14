@@ -27,15 +27,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.eju.cy.jz.R;
 import com.eju.cy.jz.tools.SizeHelper;
-import com.eju.jz.R;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 

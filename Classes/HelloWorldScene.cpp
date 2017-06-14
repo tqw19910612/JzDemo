@@ -41,22 +41,24 @@ bool HelloWorld::init()
 
 void HelloWorld::menuChangeSceneCallback(cocos2d::Ref* pSender)
 {
-    Scene* pScene = CanvasScene::scene();
-    Director::getInstance()->replaceScene(pScene);
-    return;
+//    Scene* pScene = CanvasScene::scene();
+//    Director::getInstance()->replaceScene(pScene);
+//    return;
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    JniMethodInfo methodInfo;
-    bool isHave = JniHelper::getStaticMethodInfo(methodInfo,
-                                                 "com/eju/cy/jz/app/AppActivity",
-                                                 "getInstance",
-                                                 "()Lcom/eju/cy/jz/app/AppActivity;");
-    jobject jobj;
-    if (isHave)
-    {
-        jobj = methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
+//    JniMethodInfo methodInfo;
+//    bool isHave = JniHelper::getStaticMethodInfo(methodInfo,
+//                                                 "com/eju/cy/jz/app/AppActivity",
+//                                                 "getInstance",
+//                                                 "()Lcom/eju/cy/jz/app/AppActivity;");
+//    jobject jobj;
+//    if (isHave)
+//    {
+//        jobj = methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
+
+        jobject jobj = JniHelper::getActivity();
         JniMethodInfo minfo;
-        isHave = JniHelper::getMethodInfo(minfo,"com/eju/cy/jz/app/AppActivity","CPPSayHello", "(Ljava/lang/String;I)V");
+        bool isHave = JniHelper::getMethodInfo(minfo,"com/eju/cy/jz/app/AppActivity","CPPSayHello", "(Ljava/lang/String;I)V");
         if (isHave)
         {
             log("c++发数据给android");
@@ -65,7 +67,7 @@ void HelloWorld::menuChangeSceneCallback(cocos2d::Ref* pSender)
             //        minfo.env->DeleteLocalRef(minfo.classID);
         }
 
-    }
+//    }
 #endif
 }
 

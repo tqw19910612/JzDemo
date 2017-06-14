@@ -5,15 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.eju.cy.jz.adapter.CustomAdapter;
 import com.eju.cy.jz.adapter.CustomAdapter.CustomDataAdapter;
 import com.eju.cy.jz.data.CocosData;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -22,10 +22,10 @@ import java.util.List;
  * @author tangqianwei.
  * @date 2017/06/08
  */
-public class MainActivity extends Activity implements
-        CocosData, CustomDataAdapter, RecyclerView.OnItemTouchListener {
+public class MainActivity extends Activity implements CocosData,
+        CustomDataAdapter, CustomAdapter.OnItemClickListener {
 
-    private final String[] LABELS = {
+    private static final String[] LABELS = {
             "goto cocos2dx without data",
             "goto cocos2dx with bundle data",
             "goto cocos2dx with native data"
@@ -39,8 +39,7 @@ public class MainActivity extends Activity implements
         RecyclerView recyclerView = new RecyclerView(this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new CustomAdapter(this));
-        recyclerView.addOnItemTouchListener(this);
+        recyclerView.setAdapter(new CustomAdapter(this, this));
 
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -62,20 +61,25 @@ public class MainActivity extends Activity implements
     @Override
     public String getLabel(int position) {
         return LABELS[position % LABELS.length];
+//        return String.format(Locale.CHINESE, "item %d", position);
     }
 
     @Override
-    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-    }
-
-    @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
+    public void onClick(View v, int position) {
+        Intent intent = new Intent(this, AppActivity.class);
+        switch (position) {
+            case 1: {
+                intent.putExtra(LINE_WIDTH, 12);
+                break;
+            }
+            case 2: {
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        startActivityForResult(intent, 0x1234);
+//        Log.d(this.getLocalClassName(), String.valueOf(position));
     }
 }
