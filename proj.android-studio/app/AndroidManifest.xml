@@ -14,7 +14,9 @@
         <meta-data android:name="android.app.lib_name"
                    android:value="MyGame" />
 
-        <activity android:name="com.eju.cy.jz.app.MainActivity">
+        <activity android:name="com.eju.cy.jz.app.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

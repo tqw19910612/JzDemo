@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.eju.cy.jz.tools.SizeHelper;
@@ -50,11 +51,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
 
-        TextView view = new TextView(context);
+        Button view = new Button(context);
         view.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                SizeHelper.getScreenHeight(context) / 8));
-        view.setBackgroundColor(Color.WHITE);
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         view.setGravity(Gravity.CENTER_VERTICAL);
         view.setPadding(SizeHelper.getSizeByDip(context, 6), 0, 0, 0);
         view.setTextColor(Color.BLACK);

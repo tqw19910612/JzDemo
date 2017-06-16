@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="COCOS_ACTIVITY_UPDATE_DATA" type="id"/>
+
+    <item name="ACTIVITY_MAIN_BUTTON_ADD" type="id"/>
+    <item name="ACTIVITY_MAIN_BUTTON_REMOVE" type="id"/>
+
 </resources>
